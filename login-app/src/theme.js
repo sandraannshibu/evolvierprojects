@@ -52,6 +52,7 @@ const theme = createTheme({
           '& .MuiOutlinedInput-root': {
             '& fieldset': {
               borderColor: '#EEE1C3',
+              // borderColor: error ? '#f44336' : '#EEE1C3',
               borderWidth: '1px',
               borderRadius: '100px',
             }
