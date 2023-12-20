@@ -37,7 +37,7 @@ const Login = () => {
               xl: '30px',
             },
             width: '100%',
-            height: '623.45px',
+            height: '100%',
             backgroundColor: 'rgba(0, 0, 0, 0.58)',
           }}>
 

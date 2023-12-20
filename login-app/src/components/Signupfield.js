@@ -1,117 +1,351 @@
-import React from 'react'
-import Box from '@mui/material/Box'
-import TextField from '@mui/material/TextField'
-import Button from '@mui/material/Button'
-import {Link} from "react-router-dom"
-import { Typography } from '@mui/material'
+import React from "react";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useState } from "react";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import { Link } from "react-router-dom";
+import { Typography } from "@mui/material";
+import { useForm, Controller } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 const Signupfield = () => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    setError,
+    watch,
+  } = useForm();
+  const navigate = useNavigate();
+  const onSubmit = (data) => {
+    // Simulate authentication (replace with your actual authentication logic)
+    // if (data.username === "validuser" && data.password === "validpassword@")
+    //  {
+    navigate("/"); // Navigate to profile page upon valid credentials
+    console.log(data);
+    // }
+    // else {/
+    // setError("authentication", {
+    //   type: "manual",
+    //   message: "Invalid username or password", // Set custom error message
+    // });
+    // }
+  };
+  const hasSpecialCharacter = (value) => {
+    return /[!@#$%^&*(),.?":{}|<>]/.test(value);
+  };
+  const password = watch("password", "");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showcPassword, setShowcPassword] = useState(false);
+  const handleTogglePassword = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+  const handleTogglecPassword = () => {
+    setShowcPassword((prevShowcPassword) => !prevShowcPassword);
+  };
   return (
     <Box>
-          <Typography variant='h1' fontSize={36} color={'white'} textAlign={'left'} fontWeight={'bold'} style={{marginTop:'30px',marginLeft:'50px', marginBottom:'0px'}}>Sign Up</Typography>
-        <Box  sx={{display:'flex',flexDirection:'row',marginTop:'0px',padding:'50px', paddingBottom:'0px',paddingTop:'30px'}}>
-          <TextField 
+      <Typography
+        variant="h1"
+        fontSize={36}
+        color={"white"}
+        textAlign={"left"}
+        fontWeight={"bold"}
+        style={{ marginTop: "30px", marginLeft: "50px", marginBottom: "0px" }}
+      >
+        Sign Up
+      </Typography>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Box
           sx={{
-          width:'100%',
-          background: '#FFFCF3',
-          marginBottom:'10px',
-          outline:'none',
-          borderRadius:'100px',
+            display: "flex",
+            flexDirection: "row",
+            marginTop: "0px",
+            padding: "50px",
+            paddingBottom: "0px",
+            paddingTop: "30px",
           }}
-          placeholder='First name'
-
-          >
-          </TextField>
-          <TextField
-          sx={{
-            width:'100%',
-            background: '#FFFCF3',
-            marginBottom:'10px',
-            marginLeft:'10px',
-            outline:'none',
-            borderRadius:'100px',
-          }}
-          placeholder='Last name'
-          >
-           </TextField>
+        >
+          <Controller
+            name="firstname"
+            control={control}
+            defaultValue=""
+            rules={{
+              required: "First name is required",
+            }}
+            render={({ field }) => (
+              <TextField
+                sx={{
+                  width: "100%",
+                  marginBottom: "10px",
+                  outline: "none",
+                  borderRadius: "100px",
+                }}
+                placeholder="First name"
+                {...field}
+                error={!!errors.firstname}
+                helperText={errors.firstname ? errors.firstname.message : ""}
+              ></TextField>
+            )}
+          />
+          <Controller
+            name="lastname"
+            control={control}
+            defaultValue=""
+            rules={{
+              required: "Lastname is required",
+            }}
+            render={({ field }) => (
+              <TextField
+                sx={{
+                  width: "100%",
+                  marginBottom: "10px",
+                  marginLeft: "10px",
+                  outline: "none",
+                  borderRadius: "100px",
+                }}
+                placeholder="Last name"
+                {...field}
+                error={!!errors.lastname}
+                helperText={errors.lastname ? errors.lastname.message : ""}
+              ></TextField>
+            )}
+          />
         </Box>
-        <Box sx={{display:'flex',flexDirection:'column',padding:'50px',paddingTop:'0px',paddingBottom:'0px'}}>
-          
-          <TextField
+        <Box
           sx={{
-            background: '#FFFCF3',
-            marginBottom:'10px',
-            outline:'none',
-            borderRadius:'100px',
+            display: "flex",
+            flexDirection: "column",
+            padding: "50px",
+            paddingTop: "0px",
+            paddingBottom: "0px",
           }}
-          placeholder='Email'
-          >
-          </TextField>
-          <TextField
-          sx={{
-            background: '#FFFCF3',
-            marginBottom:'10px',
-            outline:'none',
-            borderRadius:'100px',
-          }}
-          placeholder='Password'
-          >
-          </TextField>
-            <TextField
-          sx={{
-            background: '#FFFCF3',
-            marginBottom:'10px',
-            outline:'none',
-            borderRadius:'100px',
-          }}
-          placeholder='Confirm Password'
-          >
-          </TextField>
-          <TextField
-          sx={{
-            background: '#FFFCF3',
-            marginBottom:'10px',
-            outline:'none',
-            borderRadius:'100px',
-          }}
-          placeholder='Mobile Number'
-          >
-          </TextField>
-          <TextField
-          sx={{
-            background: '#FFFCF3',
-            marginBottom:'10px',
-            outline:'none',
-            borderRadius:'100px',
-          }}
-          placeholder='Gender'
-          >
-          </TextField>
+        >
+          <Controller
+            name="email"
+            control={control}
+            defaultValue=""
+            rules={{
+              required: "Email is required",
+            }}
+            render={({ field }) => (
+              <TextField
+                sx={{
+                  marginBottom: "10px",
+                  outline: "none",
+                  borderRadius: "100px",
+                }}
+                placeholder="Email"
+                {...field}
+                type="email"
+                error={!!errors.email}
+                helperText={errors.email ? errors.email.message : ""}
+              ></TextField>
+            )}
+          />
+          <Controller
+            name="password"
+            control={control}
+            defaultValue=""
+            rules={{
+              required: "Password is required",
+              minLength: {
+                value: 8,
+                message: "Password should have at least 8 characters",
+              },
+              validate: {
+                hasSpecialChar: (value) =>
+                  hasSpecialCharacter(value) ||
+                  "Password should have at least one special character",
+              },
+            }}
+            render={({ field }) => (
+              <TextField
+                sx={{
+                  marginBottom: "10px",
+                  outline: "none",
+                  borderRadius: "100px",
+                }}
+                placeholder="Password"
+                {...field}
+                type={showPassword ? "text" : "password"}
+                error={!!errors.password}
+                helperText={errors.password ? errors.password.message : ""}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={handleTogglePassword} edge="end">
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                  style: { backgroundColor: "#FFFCF3", borderRadius: "100PX" },
+                }}
+              ></TextField>
+            )}
+          />
+          <Controller
+            name="confpass"
+            control={control}
+            defaultValue=""
+            rules={{
+              required: "Password is required",
+              minLength: {
+                value: 8,
+                message: "Password should have at least 8 characters",
+              },
+              validate: {
+                hasSpecialChar: (value) =>
+                  hasSpecialCharacter(value) ||
+                  "Password should have at least one special character",
+                validate: (value) =>
+                  value === password || "Passwords do not match",
+              },
+            }}
+            render={({ field }) => (
+              <TextField
+                sx={{
+                  marginBottom: "10px",
+                  outline: "none",
+                  borderRadius: "100px",
+                }}
+                placeholder="Confirm Password"
+                type={showcPassword ? "text" : "password"}
+                {...field}
+                error={!!errors.confpass}
+                helperText={errors.confpass ? errors.confpass.message : ""}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={handleTogglecPassword} edge="end">
+                        {showcPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                  style: { backgroundColor: "#FFFCF3", borderRadius: "100PX" },
+                }}
+              ></TextField>
+            )}
+          />
+          <Controller
+            name="mobno"
+            control={control}
+            defaultValue=""
+            rules={{
+              required: "Mobile number is required",
+              minLength: {
+                value: 10,
+                message: "Phone number should have exactly 10 digits",
+              },
+              maxLength: {
+                value: 10,
+                message: "Phone number should have exactly 10 digits",
+              },
+              pattern: {
+                value: /^[0-9]*$/,
+                message: "Phone number should contain only digits",
+              },
+            }}
+            render={({ field }) => (
+              <TextField
+                sx={{
+                  marginBottom: "10px",
+                  outline: "none",
+                  borderRadius: "100px",
+                }}
+                placeholder="Mobile Number"
+                {...field}
+                error={!!errors.mobno}
+                helperText={errors.mobno ? errors.mobno.message : ""}
+              ></TextField>
+            )}
+          />
+          <Controller
+            name="gender"
+            control={control}
+            defaultValue=""
+            rules={{
+              required: "Gender is required",
+            }}
+            render={({ field }) => (
+              <TextField
+                sx={{
+                  marginBottom: "10px",
+                  outline: "none",
+                  borderRadius: "100px",
+                }}
+                placeholder="Gender"
+                {...field}
+                error={!!errors.gender}
+                helperText={errors.gender ? errors.gender.message : ""}
+              >
+
+              </TextField>
+            )}
+          />
+
+          {/* {(errors.username || errors.password) && (
+            <p style={{ color: "red",marginBottom:'0px' }}>{errors.authentication?.message}</p>
+          )} */}
 
           <Button
-          sx={{borderRadius:'100px',
-            '&:hover': {
-            backgroundColor: '#ffca28'},}} 
-            
-            variant="contained"><Link style={{color:'#1C1C1C',textDecoration:'none'}} to="/profile">Sign Up</Link></Button>
-          </Box>
-        <Box 
-             sx={{
-              display:"flex",
-              flexDirection:"column",
-              alignItems:'center',
-              justifyContent:'center',
+            sx={{
+              borderRadius: "100px",
+              "&:hover": {
+                backgroundColor: "#ffca28",
+              },
             }}
-        >
-          <Typography sx={{marginTop:'20px'}}variant='p' fontSize='13px' color={'white'} textAlign={'center'}>By signing in you are agreeing to our
-          <a href='terms.js' style={{color:'white',textDecoration:'underlined',textAlign:'center'}}>
-          Terms and Conditions</a> & <a style={{color:'white',textDecoration:'underlined',textAlign:'center'}} href='privacy.js'>Privacy Policy</a>
-          </Typography>
+            variant="contained"
+            type="submit"
+          >
+            Sign Up
+          </Button>
         </Box>
+      </form>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Typography
+          sx={{ marginTop: "10px", marginBottom: "10px" }}
+          variant="p"
+          fontSize="13px"
+          color={"white"}
+          textAlign={"center"}
+        >
+          By signing in you are agreeing to our
+          <a
+            href="terms.js"
+            style={{
+              color: "white",
+              textDecoration: "underlined",
+              textAlign: "center",
+            }}
+          >
+            Terms and Conditions
+          </a>{" "}
+          &{" "}
+          <a
+            style={{
+              color: "white",
+              textDecoration: "underlined",
+              textAlign: "center",
+            }}
+            href="privacy.js"
+          >
+            Privacy Policy
+          </a>
+        </Typography>
+      </Box>
+    </Box>
+  );
+};
 
-  </Box>
-
-  )
-}
-
-export default Signupfield
+export default Signupfield;
