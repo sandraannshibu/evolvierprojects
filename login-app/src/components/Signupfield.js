@@ -62,7 +62,13 @@ const Signupfield = () => {
         <Box
           sx={{
             display: "flex",
-            flexDirection: "row",
+            flexDirection: {
+              xs: 'column',
+              sm: 'column',
+              md: 'column',
+              lg: 'row',
+              xl: 'row',
+            },
             marginTop: "0px",
             padding: "50px",
             paddingBottom: "0px",
@@ -103,7 +109,14 @@ const Signupfield = () => {
                 sx={{
                   width: "100%",
                   marginBottom: "10px",
-                  marginLeft: "10px",
+                  marginLeft:
+                  {
+                    xs: '0px',
+                    sm: '00px',
+                    md: '0px',
+                    lg: '10px',
+                    xl: '10px',
+                  },
                   outline: "none",
                   borderRadius: "100px",
                 }}
