@@ -28,6 +28,7 @@ const Loginfield = () => {
     handleSubmit,
     formState: { errors },
     setError,
+    trigger,
   } = useForm();
   const navigate = useNavigate();
   const onSubmit = (data) => {
@@ -100,10 +101,10 @@ const Loginfield = () => {
             defaultValue=""
             rules={{
               required: "Username is required",
-              minLength: {
-                value: 8,
-                message: "Username should have at least 8 characters",
-              },
+              // minLength: {
+              //   value: 8,
+              //   message: "Username should have at least 8 characters",
+              // },
             }}
             render={({ field }) => (
               <TextField
@@ -116,6 +117,10 @@ const Loginfield = () => {
                 placeholder="Username"
                 {...field}
                 // label="Username"
+                onChange={(e) => {
+                  field.onChange(e);
+                  trigger('username');
+                }}
                 error={!!errors.username}
                 helperText={errors.username ? errors.username.message : ""}
               ></TextField>
@@ -128,15 +133,15 @@ const Loginfield = () => {
             defaultValue=""
             rules={{
               required: "Password is required",
-              minLength: {
-                value: 8,
-                message: "Password should have at least 8 characters",
-              },
-              validate: {
-                hasSpecialChar: (value) =>
-                  hasSpecialCharacter(value) ||
-                  "Password should have at least one special character",
-              },
+              // minLength: {
+              //   value: 8,
+              //   message: "Password should have at least 8 characters",
+              // },
+              // validate: {
+              //   hasSpecialChar: (value) =>
+              //     hasSpecialCharacter(value) ||
+              //     "Password should have at least one special character",
+              // },
             }}
             render={({ field }) => (
               <TextField
@@ -155,6 +160,10 @@ const Loginfield = () => {
                 }}
                 placeholder="Password"
                 {...field}
+                onChange={(e) => {
+                  field.onChange(e);
+                  trigger('password');
+                }}
                 type={showPassword ? "text" : "password"}
                 error={!!errors.password}
                 helperText={errors.password ? errors.password.message : ""}
