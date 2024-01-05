@@ -18,6 +18,7 @@ const Signupfield = () => {
     formState: { errors },
     setError,
     watch,
+    trigger,
   } = useForm();
   const navigate = useNavigate();
   const onSubmit = (data) => {
@@ -92,6 +93,10 @@ const Signupfield = () => {
                 }}
                 placeholder="First name"
                 {...field}
+                onChange={(e) => {
+                  field.onChange(e);
+                  trigger('firstname');
+                }}
                 error={!!errors.firstname}
                 helperText={errors.firstname ? errors.firstname.message : ""}
               ></TextField>
@@ -122,6 +127,10 @@ const Signupfield = () => {
                 }}
                 placeholder="Last name"
                 {...field}
+                onChange={(e) => {
+                  field.onChange(e);
+                  trigger('lastname');
+                }}
                 error={!!errors.lastname}
                 helperText={errors.lastname ? errors.lastname.message : ""}
               ></TextField>
@@ -143,6 +152,10 @@ const Signupfield = () => {
             defaultValue=""
             rules={{
               required: "Email is required",
+              pattern: {
+                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                message: 'Invalid email format',
+              },
             }}
             render={({ field }) => (
               <TextField
@@ -156,6 +169,10 @@ const Signupfield = () => {
                 type="email"
                 error={!!errors.email}
                 helperText={errors.email ? errors.email.message : ""}
+                onChange={(e) => {
+                  field.onChange(e);
+                  trigger('email');
+                }}
               ></TextField>
             )}
           />
@@ -172,7 +189,11 @@ const Signupfield = () => {
               validate: {
                 hasSpecialChar: (value) =>
                   hasSpecialCharacter(value) ||
-                  "Password should have at least one special character",
+                  "Password should have at least one special character",      
+              },
+              pattern: {
+                value: /^(?=.*[A-Z])(?=.*\d).+$/,
+                message: 'Password should contain at least one capital letter and one number',
               },
             }}
             render={({ field }) => (
@@ -184,6 +205,10 @@ const Signupfield = () => {
                 }}
                 placeholder="Password"
                 {...field}
+                onChange={(e) => {
+                  field.onChange(e);
+                  trigger('password');
+                }}
                 type={showPassword ? "text" : "password"}
                 error={!!errors.password}
                 helperText={errors.password ? errors.password.message : ""}
@@ -205,18 +230,18 @@ const Signupfield = () => {
             control={control}
             defaultValue=""
             rules={{
-              required: "Password is required",
-              minLength: {
-                value: 8,
-                message: "Password should have at least 8 characters",
-              },
-              validate: {
-                hasSpecialChar: (value) =>
-                  hasSpecialCharacter(value) ||
-                  "Password should have at least one special character",
+              required: "Password should be confirmed",
+              // minLength: {
+              //   value: 8,
+              //   message: "Password should have at least 8 characters",
+              // },
+              // validate: {
+                // hasSpecialChar: (value) =>
+                //   hasSpecialCharacter(value) ||
+                //   "Password should have at least one special character",
                 validate: (value) =>
                   value === password || "Passwords do not match",
-              },
+              // },
             }}
             render={({ field }) => (
               <TextField
@@ -228,6 +253,10 @@ const Signupfield = () => {
                 placeholder="Confirm Password"
                 type={showcPassword ? "text" : "password"}
                 {...field}
+                onChange={(e) => {
+                  field.onChange(e);
+                  trigger('confpass');
+                }}
                 error={!!errors.confpass}
                 helperText={errors.confpass ? errors.confpass.message : ""}
                 InputProps={{
@@ -249,6 +278,10 @@ const Signupfield = () => {
             defaultValue=""
             rules={{
               required: "Mobile number is required",
+              pattern: {
+                value: /^[0-9]*$/,
+                message: "Phone number should contain only digits",
+              },
               minLength: {
                 value: 10,
                 message: "Phone number should have exactly 10 digits",
@@ -256,10 +289,6 @@ const Signupfield = () => {
               maxLength: {
                 value: 10,
                 message: "Phone number should have exactly 10 digits",
-              },
-              pattern: {
-                value: /^[0-9]*$/,
-                message: "Phone number should contain only digits",
               },
             }}
             render={({ field }) => (
@@ -271,6 +300,10 @@ const Signupfield = () => {
                 }}
                 placeholder="Mobile Number"
                 {...field}
+                onChange={(e) => {
+                  field.onChange(e);
+                  trigger('mobno');
+                }}
                 error={!!errors.mobno}
                 helperText={errors.mobno ? errors.mobno.message : ""}
               ></TextField>
@@ -292,6 +325,10 @@ const Signupfield = () => {
                 }}
                 placeholder="Gender"
                 {...field}
+                onChange={(e) => {
+                  field.onChange(e);
+                  trigger('gender');
+                }}
                 error={!!errors.gender}
                 helperText={errors.gender ? errors.gender.message : ""}
               >
