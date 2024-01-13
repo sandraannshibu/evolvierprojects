@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import { Typography } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Signupfield = () => {
   const {
@@ -21,19 +22,23 @@ const Signupfield = () => {
     trigger,
   } = useForm();
   const navigate = useNavigate();
-  const onSubmit = (data) => {
-    // Simulate authentication (replace with your actual authentication logic)
-    // if (data.username === "validuser" && data.password === "validpassword@")
-    //  {
-    navigate("/"); // Navigate to profile page upon valid credentials
-    console.log(data);
-    // }
-    // else {/
-    // setError("authentication", {
-    //   type: "manual",
-    //   message: "Invalid username or password", // Set custom error message
-    // });
-    // }
+  const onSubmit = async (data) => {
+    try{
+      const response=await axios.post('http://localhost:5000/api/kongcouriers/signup',data);
+      console.log(response);
+        alert(response.data);
+        navigate("/")
+      
+    }
+    catch(error) {
+      console.error('Error while making the POST request:', error);
+    }
+
+    
+
+    // navigate("/"); 
+    // console.log(data);
+
   };
   const hasSpecialCharacter = (value) => {
     return /[!@#$%^&*(),.?":{}|<>]/.test(value);
