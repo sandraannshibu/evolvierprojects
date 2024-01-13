@@ -21,6 +21,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
 import "../pages/style.css";
 import { useForm, Controller } from "react-hook-form";
+import axios from 'axios';
 
 const Loginfield = () => {
   const {
@@ -31,17 +32,35 @@ const Loginfield = () => {
     trigger,
   } = useForm();
   const navigate = useNavigate();
-  const onSubmit = (data) => {
-    // Simulate authentication (replace with your actual authentication logic)
-    if (data.username === "validuser" && data.password === "validpassword@") {
-      navigate("/profile"); // Navigate to profile page upon valid credentials
-      console.log(data);
-    } else {
-      setError("authentication", {
-        type: "manual",
-        message: "Invalid username or password", // Set custom error message
-      });
+  const onSubmit = async(data) => {
+    try{
+      console.log(data)
+      const response=await axios.post('http://localhost:5000/api/kongcouriers/login',data);
+      console.log(response);
+      if(response.data.message=="Incorrect Email or password")
+      {
+        window.location.reload();
+        alert(response.data.message);
+
+      }
+      else if(response.data.message=="User not found,please SignUp")
+      {
+        navigate("/signup")
+        alert(response.data.message);
+      }
+      else
+      {
+      localStorage.setItem('token', response.data.token);
+      navigate('/profile')
+      }
+ 
+      
     }
+    catch(error) {
+      console.error('Error while making the POST request:', error);
+    }
+
+
   };
   const hasSpecialCharacter = (value) => {
     return /[!@#$%^&*(),.?":{}|<>]/.test(value);
@@ -96,15 +115,15 @@ const Loginfield = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box sx={{ display: "flex", flexDirection: "column", margin: "25px" }}>
           <Controller
-            name="username"
+            name="email"
             control={control}
             defaultValue=""
             rules={{
-              required: "Username is required",
-              // minLength: {
-              //   value: 8,
-              //   message: "Username should have at least 8 characters",
-              // },
+              required: "Email is required",
+              pattern: {
+                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                message: 'Invalid email format',
+              },
             }}
             render={({ field }) => (
               <TextField
@@ -114,15 +133,15 @@ const Loginfield = () => {
                   marginBottom: "10px",
                   // borderRadius: "100px",
                 }}
-                placeholder="Username"
+                placeholder="Email"
                 {...field}
                 // label="Username"
                 onChange={(e) => {
                   field.onChange(e);
-                  trigger('username');
+                  trigger('email');
                 }}
-                error={!!errors.username}
-                helperText={errors.username ? errors.username.message : ""}
+                error={!!errors.email}
+                helperText={errors.email ? errors.email.message : ""}
               ></TextField>
             )}
           />
@@ -133,15 +152,7 @@ const Loginfield = () => {
             defaultValue=""
             rules={{
               required: "Password is required",
-              // minLength: {
-              //   value: 8,
-              //   message: "Password should have at least 8 characters",
-              // },
-              // validate: {
-              //   hasSpecialChar: (value) =>
-              //     hasSpecialCharacter(value) ||
-              //     "Password should have at least one special character",
-              // },
+
             }}
             render={({ field }) => (
               <TextField
@@ -170,11 +181,6 @@ const Loginfield = () => {
               ></TextField>
             )}
           />
-          {/* {(errors.username || errors.password) && (
-            <p style={{ color: "red", marginBottom: "0px" }}>
-              {errors.authentication?.message}
-            </p>
-          )} */}
           <Button
             sx={{
               borderRadius: "100px",
@@ -186,7 +192,6 @@ const Loginfield = () => {
             }}
             variant="contained"
             type="submit"
-            // disabled={Object.keys(errors).length > 0}
           >
             Continue
           </Button>
