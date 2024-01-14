@@ -14,6 +14,7 @@ import { Link,useNavigate} from "react-router-dom";
 import myKong from "./kongc.png";
 import facebook from "./facebook.png";
 import google from "./google.png";
+import apple from "../components/apple.png"
 import theme from "../theme";
 import InputAdornment from "@mui/material/InputAdornment";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -48,34 +49,11 @@ const Loginfield = () => {
         navigate("/signup")
         alert(response.data.message);
       }
-      else
-      {
-      localStorage.setItem('token', response.data.token);
-      const token=localStorage.getItem("token")
-      if(token)
-      {
-        try{
-          const response=await axios.post('http://localhost:5000/api/kongcouriers/profile',{token});
-          console.log(response);
-          console.log("hello")
-          const userdata=response.data
-          setUserData(userdata);
-          console.log(userdata)
-          navigate('/profile', { state: { userData: userdata } });
-          console.log(token)
-          
-        }
-        catch(error) {
-          console.error('Error while making the POST request:', error);
-        }
-      }
       else{
-
-        alert("unauthorized acsess");
-      }
-      }
+          localStorage.setItem('token', response.data.token);
+          navigate('/profile');
  
-      
+      }      
     }
     catch(error) {
       console.error('Error while making the POST request:', error);
@@ -122,6 +100,7 @@ const Loginfield = () => {
         <Box sx={{ margin: "25px" }}>
           <img src={facebook} alt="facebook"></img>
           <img className="google" src={google} alt="google"></img>
+          <img className="apple" src={apple} alt="apple"></img>
         </Box>
 
         <Typography

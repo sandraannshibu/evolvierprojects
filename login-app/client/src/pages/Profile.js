@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState,useEffect } from 'react'
 import { Box, Paper, ThemeProvider } from '@mui/material'
 import Profilefield from '../components/Profilefield'
 import Logokong from '../components/Logokong';
@@ -7,7 +7,30 @@ import Layout from './Layout'
 import axios from 'axios';
 
 
-const Profile = ()=> {
+
+const Profile =  ()=> {
+  const [userdata, setUserData] = useState(null);
+  const token=localStorage.getItem("token")
+
+  const fetchData = async () => {
+  if(token)
+  {
+    try{
+      const response= await axios.post('http://localhost:5000/api/kongcouriers/profile',{token});
+      setUserData(response.data);
+    }
+    catch(error) {
+      console.error('Error while making the POST request:', error);
+    }
+  }
+  else{
+
+    alert("unauthorized acsess");
+  }
+}
+  useEffect(() => {
+    fetchData();
+   }, [token]);
 
   return (
     <Layout>
@@ -49,7 +72,7 @@ const Profile = ()=> {
               backgroundColor: 'rgba(0, 0, 0, 0.58)',
             }}>
 
-              <Profilefield />
+             {userdata && <Profilefield userdata={userdata} />}
 
 
             </Paper>

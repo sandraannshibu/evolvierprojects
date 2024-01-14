@@ -1,6 +1,6 @@
 import React from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
@@ -8,7 +8,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { Link } from "react-router-dom";
 import { Typography } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
-import { useNavigate,useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import Layout from "../pages/Layout";
 import theme from "../theme";
@@ -23,25 +23,59 @@ const EditProfile = () => {
     setError,
     watch,
     trigger,
+    setValue,
   } = useForm();
   const navigate = useNavigate();
-  const location = useLocation();
-  const [userData, setUserData] = useState(null);
-  const userdata = location.state?.userData;
-  const userId =userdata._id
-//   console.log(userId)
-//   console.log(userData)
+  const [profiledata, setdata] = useState(null);
+  const token = localStorage.getItem("token");
+  console.log(profiledata);
+  const fetchData = async () => {
+    if (token) {
+      try {
+        const userData = await axios.post(
+          "http://localhost:5000/api/kongcouriers/profile",
+          { token }
+        );
+        // console.log(userData);
+        setdata(userData.data);
+        // console.log(profiledata);
+      } catch (error) {
+        console.error("Error while fetching data", error);
+      }
+    } else {
+      alert("unauthorized acsess");
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    // console.log(profiledata)
+    if (profiledata) {
+      const { firstName, lastName, email, mobileNumber, gender } = profiledata;
+
+      setValue("firstname", firstName);
+      setValue("lastname", lastName);
+      setValue("email", email);
+      setValue("mobno", mobileNumber);
+      setValue("gender", gender);
+    }
+  }, [profiledata]);
+
   const onSubmit = async (data) => {
+    // console.log(data);
+    console.log("hello223");
+    console.log(token)
     try {
-      const response = await axios.post("http://localhost:5000/api/kongcouriers/editprofile",{data,userId});
-      console.log("hello222")
+      const response = await axios.post(
+        "http://localhost:5000/api/kongcouriers/editprofile",
+        {data,token}
+      );
+      console.log("hello222");
       console.log(response);
       alert(response.data);
-      const token=localStorage.getItem('token');
-      console.log(token)
-      const userData= await axios.post('http://localhost:5000/api/kongcouriers/profile',{token});
-      setUserData(userData);
-      navigate('/profile', { state: { userData: userData } });
+      navigate('/profile');
     } catch (error) {
       console.error("Error while making the POST request:", error);
     }
@@ -61,7 +95,7 @@ const EditProfile = () => {
   return (
     <ThemeProvider theme={theme}>
       <Layout>
-      <Logokong />
+        <Logokong />
         <Box
           sx={{
             display: "flex",
@@ -141,7 +175,7 @@ const EditProfile = () => {
                           outline: "none",
                           borderRadius: "100px",
                         }}
-                        placeholder={userData.firstName}
+                        placeholder="firstname"
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);
@@ -176,7 +210,7 @@ const EditProfile = () => {
                           outline: "none",
                           borderRadius: "100px",
                         }}
-                        placeholder={userData.lastName}
+                        placeholder="lastname"
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);
@@ -190,6 +224,7 @@ const EditProfile = () => {
                     )}
                   />
                 </Box>
+
                 <Box
                   sx={{
                     display: "flex",
@@ -218,7 +253,7 @@ const EditProfile = () => {
                           outline: "none",
                           borderRadius: "100px",
                         }}
-                        placeholder={userData.email}
+                        placeholder="email"
                         {...field}
                         type="email"
                         error={!!errors.email}
@@ -369,7 +404,7 @@ const EditProfile = () => {
                           outline: "none",
                           borderRadius: "100px",
                         }}
-                        placeholder={userData.mobileNumber}
+                        placeholder="mobile number"
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);
@@ -394,7 +429,7 @@ const EditProfile = () => {
                           outline: "none",
                           borderRadius: "100px",
                         }}
-                        placeholder={userData.gender}
+                        placeholder="gender"
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);
@@ -427,8 +462,7 @@ const EditProfile = () => {
                   alignItems: "center",
                   justifyContent: "center",
                 }}
-              >
-              </Box>
+              ></Box>
             </Box>
           </Paper>
         </Box>

@@ -5,22 +5,15 @@ import Button from '@mui/material/Button'
 import {Link,useLocation,useNavigate} from "react-router-dom"
 
 
-function Profilefield() {
-  const location = useLocation();
+const Profilefield = ({userdata})=> {
   const navigate = useNavigate();
-  const userData = location.state?.userData;
-  useEffect(() => {
-    if (!userData) {
-      navigate('/login');
-    }
-  }, [userData]);
 
   const logout = () => {
     localStorage.removeItem('token');
     navigate('/');
   };
   const editprofile = () => {
-    navigate('/editprofile', { state: { userData: userData } });
+    navigate('/editprofile');
   };
   return (
     <Box 
@@ -64,10 +57,10 @@ function Profilefield() {
         src="/broken-image.jpg" />
         </Box>
         <Box sx={{flexDirection:'column',display:'flex',marginBottom:{xs: '9px',sm: '70px',md: '70px',lg: '70px',xl: '70px'}}}>
-            <Typography variant='p' fontSize={{xs: 20,sm: 24,md: 24,lg: 24,xl: 24}} fontWeight={'bold'} color={'white'} textAlign={'left'}>{userData.firstName} {userData.lastName}</Typography>
-            <Typography variant='body2' fontSize={{xs: 18,sm: 22,md: 22,lg: 22,xl: 22}} color={'white'} textAlign={'left'}>{userData.email}</Typography>
-            <Typography variant='p' fontSize={{xs: 18,sm: 22,md: 22,lg: 22,xl: 22}} color={'white'} textAlign={'left'}>{`+91`} {userData.mobileNumber}</Typography>
-            <Typography variant='p' fontSize={{xs: 18,sm: 22,md: 22,lg: 22,xl: 22}} color={'white'} textAlign={'left'}>{userData.gender}</Typography>
+            <Typography variant='p' fontSize={{xs: 20,sm: 24,md: 24,lg: 24,xl: 24}} fontWeight={'bold'} color={'white'} textAlign={'left'}>{userdata.firstName} {userdata.lastName}</Typography>
+            <Typography variant='body2' fontSize={{xs: 18,sm: 22,md: 22,lg: 22,xl: 22}} color={'white'} textAlign={'left'}>{userdata.email}</Typography>
+            <Typography variant='p' fontSize={{xs: 18,sm: 22,md: 22,lg: 22,xl: 22}} color={'white'} textAlign={'left'}>{`+91`} {userdata.mobileNumber}</Typography>
+            <Typography variant='p' fontSize={{xs: 18,sm: 22,md: 22,lg: 22,xl: 22}} color={'white'} textAlign={'left'}>{userdata.gender}</Typography>
 
 
         </Box>
@@ -84,13 +77,6 @@ function Profilefield() {
             },
             alignItems:'center',
             justifyContent:'center',
-            // margin:{
-            //   xs: '0px',
-            //   sm: '10px',
-            //   md: '10px',
-            //   lg: '10px',
-            //   xl: '10px',
-            // },
             
           }}
       >

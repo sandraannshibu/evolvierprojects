@@ -53,9 +53,17 @@ const getProfile = async (req, res) => {
 };
 const editProfile = async (req, res) => {
   try {
-    console.log(req.body);
-    const userId = req.body.userId;
-    console.log(req.body.data.firstname)
+    const token = req.body.token;
+    let userId;
+    if (token) {
+      try {
+        const decodedToken = jwt.verify(token, process.env.secret_key); // Replace with your actual secret key
+        userId = decodedToken.userId;
+      } catch (error) {
+        console.error("Invalid token:", error.message);
+      }
+    }
+    console.log(req.body.data.firstname);
     const userData = {
       firstName: req.body.data.firstname,
       lastName: req.body.data.lastname,
@@ -63,16 +71,17 @@ const editProfile = async (req, res) => {
       password: await bcrypt.hash(req.body.data.password, 5),
       mobileNumber: req.body.data.mobno,
       gender: req.body.data.gender,
-      };
-      console.log(userData)
+    };
+    console.log(userData);
     const result = await User.updateOne({ _id: userId }, userData);
     console.log(result);
-    if(result)
-    {res.json("Profile Sucessfully Updated");
-  console.log("request sent ")};
+    if (result) {
+      res.json("Profile Sucessfully Updated");
+      console.log("request sent ");
+    }
   } catch (error) {
     console.error("Error in updating profile");
-    res.json("error in updating profile")
+    res.json("error in updating profile");
   }
 };
 export { createProfile, loginProfile, getProfile, editProfile };
