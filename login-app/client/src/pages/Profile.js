@@ -5,14 +5,17 @@ import Logokong from '../components/Logokong';
 import theme from '../theme'
 import Layout from './Layout'
 import axios from 'axios';
+import {useNavigate} from "react-router-dom"
 
 
 
 const Profile =  ()=> {
   const [userdata, setUserData] = useState(null);
   const token=localStorage.getItem("token")
+  const navigate = useNavigate();
 
   const fetchData = async () => {
+  
   if(token)
   {
     try{
@@ -20,17 +23,20 @@ const Profile =  ()=> {
       setUserData(response.data);
     }
     catch(error) {
+      
       console.error('Error while making the POST request:', error);
+
     }
   }
   else{
 
     alert("unauthorized acsess");
+    navigate('/')
   }
 }
   useEffect(() => {
     fetchData();
-   }, [token]);
+   }, []);
 
   return (
     <Layout>

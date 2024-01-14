@@ -44,6 +44,7 @@ const EditProfile = () => {
       }
     } else {
       alert("unauthorized acsess");
+      navigate("/")
     }
   };
   useEffect(() => {
