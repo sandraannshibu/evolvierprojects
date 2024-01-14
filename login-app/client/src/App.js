@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import theme from "./theme";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
+import EditProfile from './components/EditProfile'
 
 // import './index.css'
 
@@ -19,6 +20,7 @@ function App() {
               <Route path="/" element={<Login />}></Route>
               <Route path="/signup" element={<Signup />}></Route>
               <Route path="/profile" element={<Profile />}></Route>
+              <Route path="/editprofile" element={<EditProfile />}></Route>
             </Routes>
           </Router>
         }

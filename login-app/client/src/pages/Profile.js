@@ -1,11 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Box, Paper, ThemeProvider } from '@mui/material'
 import Profilefield from '../components/Profilefield'
 import Logokong from '../components/Logokong';
 import theme from '../theme'
 import Layout from './Layout'
+import axios from 'axios';
 
-function Profile() {
+
+const Profile = ()=> {
+
   return (
     <Layout>
       <ThemeProvider theme={theme}>

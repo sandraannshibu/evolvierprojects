@@ -8,10 +8,9 @@ import {
   Card,
 } from "@mui/material";
 import React from "react";
-import { useState } from "react";
+import { useState,useEffect} from "react";
 import Logokong from "./Logokong";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link,useNavigate} from "react-router-dom";
 import myKong from "./kongc.png";
 import facebook from "./facebook.png";
 import google from "./google.png";
@@ -32,6 +31,7 @@ const Loginfield = () => {
     trigger,
   } = useForm();
   const navigate = useNavigate();
+  const [userData, setUserData] = useState(null);
   const onSubmit = async(data) => {
     try{
       console.log(data)
@@ -51,7 +51,28 @@ const Loginfield = () => {
       else
       {
       localStorage.setItem('token', response.data.token);
-      navigate('/profile')
+      const token=localStorage.getItem("token")
+      if(token)
+      {
+        try{
+          const response=await axios.post('http://localhost:5000/api/kongcouriers/profile',{token});
+          console.log(response);
+          console.log("hello")
+          const userdata=response.data
+          setUserData(userdata);
+          console.log(userdata)
+          navigate('/profile', { state: { userData: userdata } });
+          console.log(token)
+          
+        }
+        catch(error) {
+          console.error('Error while making the POST request:', error);
+        }
+      }
+      else{
+
+        alert("unauthorized acsess");
+      }
       }
  
       
