@@ -43,7 +43,7 @@ const EditProfile = () => {
         console.error("Error while fetching data", error);
       }
     } else {
-      alert("unauthorized acsess");
+      alert("unauthorized acsess,Login or SignUp");
       navigate("/")
     }
   };
@@ -384,7 +384,7 @@ const EditProfile = () => {
                     control={control}
                     defaultValue=""
                     rules={{
-                      required: "Mobile number is required",
+                      // required: "Mobile number is required",
                       pattern: {
                         value: /^[0-9]*$/,
                         message: "Phone number should contain only digits",
@@ -421,7 +421,7 @@ const EditProfile = () => {
                     control={control}
                     defaultValue=""
                     rules={{
-                      required: "Gender is required",
+                      // required: "Gender is required",
                     }}
                     render={({ field }) => (
                       <TextField

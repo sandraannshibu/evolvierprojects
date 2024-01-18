@@ -1,6 +1,10 @@
 import { User } from "./mongoschema.mjs";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import {OAuth2Client} from 'google-auth-library';
+import axios from 'axios';
+
+const googleClient = new OAuth2Client({clientId:'913713535860-8ie3ssfietrosguf1oarlcjdaooo3ts7.apps.googleusercontent.com'});
 
 const createProfile = async (req, res) => {
   const email = req.body.email;
@@ -84,4 +88,87 @@ const editProfile = async (req, res) => {
     res.json("error in updating profile");
   }
 };
-export { createProfile, loginProfile, getProfile, editProfile };
+
+const googleLogin = async (req, res) => {
+  console.log(req.body);
+  const { tokenId } = req.body;
+  console.log(tokenId);
+
+  try {
+    const response = await axios.get('https://www.googleapis.com/oauth2/v2/userinfo', {
+      headers: {
+        Authorization: `Bearer ${tokenId}`,
+      },
+    });
+
+    const userData = response.data;
+    console.log(userData);
+    const firstName = userData.given_name;
+    const lastName = userData.family_name;
+    const email = userData.email;
+
+    const user = await User.findOne({ email });
+    if(user)
+    {
+      console.log(user)
+      const token = jwt.sign({ userId: user._id }, process.env.secret_key, {
+        expiresIn: "1h",
+      });
+      res.json(token);
+    }
+    else{
+      const userdata = await User.create({firstName,lastName,email});
+      console.log(userdata)
+      const token = jwt.sign({ userId: userdata._id }, process.env.secret_key, {
+        expiresIn: "1h",
+      });
+      // console.log(token)
+      res.json(token);
+    }
+
+    // res.status(200).json({userFName,userLName, userEmail });
+  } catch (error) {
+    console.error('Error fetching user info from Google API:', error);
+    // res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+const facebookLogin = async (req, res) => {
+  console.log(req.body);
+  const accessToken=req.body.accesstoken
+  try {
+    const response = await fetch(`https://graph.facebook.com/me?fields=id,name,first_name,last_name,email,picture&access_token=${accessToken}`);
+    const userData = await response.json();
+    console.log(userData);
+    
+    const firstName = userData.first_name;
+    const lastName = userData.last_name;
+    const email = userData.email;
+
+    const user = await User.findOne({ email });
+    console.log(user)
+
+    if(user)
+    {
+      console.log(user)
+      const token = jwt.sign({ userId: user._id }, process.env.secret_key, {
+        expiresIn: "1h",
+      });
+      res.json(token);
+    }
+    else{
+      const userdata = await User.create({firstName,lastName,email});
+      console.log(userdata)
+      const token = jwt.sign({ userId: userdata._id }, process.env.secret_key, {
+        expiresIn: "1h",
+      });
+      // console.log(token)
+      res.json(token);
+    }
+
+  }catch (error) {
+    console.error('Error fetching user info from Facebook API:', error);
+    // res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+export { createProfile, loginProfile, getProfile, editProfile,googleLogin,facebookLogin };

@@ -30,7 +30,7 @@ const Profile =  ()=> {
   }
   else{
 
-    alert("unauthorized acsess");
+    alert("unauthorized acsess,Login or SignUp");
     navigate('/')
   }
 }

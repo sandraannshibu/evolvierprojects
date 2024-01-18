@@ -7,11 +7,13 @@ import theme from "./theme";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
 import EditProfile from './components/EditProfile'
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 // import './index.css'
 
 function App() {
   return (
+    <GoogleOAuthProvider clientId="913713535860-8ie3ssfietrosguf1oarlcjdaooo3ts7.apps.googleusercontent.com">
     <ThemeProvider theme={theme}>
       <div className="App">
         {
@@ -26,6 +28,7 @@ function App() {
         }
       </div>
     </ThemeProvider>
+    </GoogleOAuthProvider>
   );
 }
 

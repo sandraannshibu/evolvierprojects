@@ -236,17 +236,8 @@ const Signupfield = () => {
             defaultValue=""
             rules={{
               required: "Password should be confirmed",
-              // minLength: {
-              //   value: 8,
-              //   message: "Password should have at least 8 characters",
-              // },
-              // validate: {
-                // hasSpecialChar: (value) =>
-                //   hasSpecialCharacter(value) ||
-                //   "Password should have at least one special character",
                 validate: (value) =>
                   value === password || "Passwords do not match",
-              // },
             }}
             render={({ field }) => (
               <TextField
@@ -282,7 +273,7 @@ const Signupfield = () => {
             control={control}
             defaultValue=""
             rules={{
-              required: "Mobile number is required",
+              // required: "Mobile number is required",
               pattern: {
                 value: /^[0-9]*$/,
                 message: "Phone number should contain only digits",
@@ -319,7 +310,7 @@ const Signupfield = () => {
             control={control}
             defaultValue=""
             rules={{
-              required: "Gender is required",
+              // required: "Gender is required",
             }}
             render={({ field }) => (
               <TextField
@@ -341,10 +332,6 @@ const Signupfield = () => {
               </TextField>
             )}
           />
-
-          {/* {(errors.username || errors.password) && (
-            <p style={{ color: "red",marginBottom:'0px' }}>{errors.authentication?.message}</p>
-          )} */}
 
           <Button
             sx={{

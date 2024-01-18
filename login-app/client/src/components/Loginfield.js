@@ -22,6 +22,10 @@ import IconButton from "@mui/material/IconButton";
 import "../pages/style.css";
 import { useForm, Controller } from "react-hook-form";
 import axios from 'axios';
+import SocialLogin from './socialogin';
+
+
+
 
 const Loginfield = () => {
   const {
@@ -44,10 +48,10 @@ const Loginfield = () => {
         alert(response.data.message);
 
       }
-      else if(response.data.message=="User not found,please SignUp")
+      else if(response.data.message=="User not found,please SignUp")//USER_NOT_FOUND
       {
-        navigate("/signup")
         alert(response.data.message);
+        navigate("/signup")
       }
       else{
           localStorage.setItem('token', response.data.token);
@@ -98,9 +102,12 @@ const Loginfield = () => {
         </Typography>
 
         <Box sx={{ margin: "25px" }}>
-          <img src={facebook} alt="facebook"></img>
+        <SocialLogin />
+
+
+          {/* <img src={facebook} alt="facebook"></img>
           <img className="google" src={google} alt="google"></img>
-          <img className="apple" src={apple} alt="apple"></img>
+          <img className="apple" src={apple} alt="apple"></img> */}
         </Box>
 
         <Typography
