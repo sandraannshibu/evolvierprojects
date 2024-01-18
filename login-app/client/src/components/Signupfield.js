@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import { Typography } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Signupfield = () => {
   const {
@@ -21,19 +22,23 @@ const Signupfield = () => {
     trigger,
   } = useForm();
   const navigate = useNavigate();
-  const onSubmit = (data) => {
-    // Simulate authentication (replace with your actual authentication logic)
-    // if (data.username === "validuser" && data.password === "validpassword@")
-    //  {
-    navigate("/"); // Navigate to profile page upon valid credentials
-    console.log(data);
-    // }
-    // else {/
-    // setError("authentication", {
-    //   type: "manual",
-    //   message: "Invalid username or password", // Set custom error message
-    // });
-    // }
+  const onSubmit = async (data) => {
+    try{
+      const response=await axios.post('http://localhost:5000/api/kongcouriers/signup',data);
+      console.log(response);
+        alert(response.data);
+        navigate("/")
+      
+    }
+    catch(error) {
+      console.error('Error while making the POST request:', error);
+    }
+
+    
+
+    // navigate("/"); 
+    // console.log(data);
+
   };
   const hasSpecialCharacter = (value) => {
     return /[!@#$%^&*(),.?":{}|<>]/.test(value);
@@ -231,17 +236,8 @@ const Signupfield = () => {
             defaultValue=""
             rules={{
               required: "Password should be confirmed",
-              // minLength: {
-              //   value: 8,
-              //   message: "Password should have at least 8 characters",
-              // },
-              // validate: {
-                // hasSpecialChar: (value) =>
-                //   hasSpecialCharacter(value) ||
-                //   "Password should have at least one special character",
                 validate: (value) =>
                   value === password || "Passwords do not match",
-              // },
             }}
             render={({ field }) => (
               <TextField
@@ -277,7 +273,7 @@ const Signupfield = () => {
             control={control}
             defaultValue=""
             rules={{
-              required: "Mobile number is required",
+              // required: "Mobile number is required",
               pattern: {
                 value: /^[0-9]*$/,
                 message: "Phone number should contain only digits",
@@ -314,7 +310,7 @@ const Signupfield = () => {
             control={control}
             defaultValue=""
             rules={{
-              required: "Gender is required",
+              // required: "Gender is required",
             }}
             render={({ field }) => (
               <TextField
@@ -336,10 +332,6 @@ const Signupfield = () => {
               </TextField>
             )}
           />
-
-          {/* {(errors.username || errors.password) && (
-            <p style={{ color: "red",marginBottom:'0px' }}>{errors.authentication?.message}</p>
-          )} */}
 
           <Button
             sx={{

@@ -1,9 +1,18 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import Loginfield from '../components/Loginfield'
 import { Box, Paper, ThemeProvider, Typography } from '@mui/material'
 import Layout from './Layout'
 import theme from '../theme'
+import {useNavigate} from "react-router-dom"
 const Login = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate('/profile');
+    }
+  }, [navigate]);
   return (
 
     <ThemeProvider theme={theme}>

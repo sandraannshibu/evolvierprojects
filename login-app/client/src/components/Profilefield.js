@@ -1,11 +1,20 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import { Box, Typography } from '@mui/material'
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button'
-import {Link} from "react-router-dom"
+import {Link,useLocation,useNavigate} from "react-router-dom"
 
 
-function Profilefield() {
+const Profilefield = ({userdata})=> {
+  const navigate = useNavigate();
+
+  const logout = () => {
+    localStorage.removeItem('token');
+    navigate('/');
+  };
+  const editprofile = () => {
+    navigate('/editprofile');
+  };
   return (
     <Box 
      sx={{
@@ -48,10 +57,10 @@ function Profilefield() {
         src="/broken-image.jpg" />
         </Box>
         <Box sx={{flexDirection:'column',display:'flex',marginBottom:{xs: '9px',sm: '70px',md: '70px',lg: '70px',xl: '70px'}}}>
-            <Typography variant='p' fontSize={{xs: 20,sm: 24,md: 24,lg: 24,xl: 24}} fontWeight={'bold'} color={'white'} textAlign={'left'}>Mia Malik</Typography>
-            <Typography variant='body2' fontSize={{xs: 18,sm: 22,md: 22,lg: 22,xl: 22}} color={'white'} textAlign={'left'}>miamaliko@gmail.com</Typography>
-            <Typography variant='p' fontSize={{xs: 18,sm: 22,md: 22,lg: 22,xl: 22}} color={'white'} textAlign={'left'}>+91 890637123</Typography>
-            <Typography variant='p' fontSize={{xs: 18,sm: 22,md: 22,lg: 22,xl: 22}} color={'white'} textAlign={'left'}>Female</Typography>
+            <Typography variant='p' fontSize={{xs: 20,sm: 24,md: 24,lg: 24,xl: 24}} fontWeight={'bold'} color={'white'} textAlign={'left'}>{userdata.firstName} {userdata.lastName}</Typography>
+            <Typography variant='body2' fontSize={{xs: 18,sm: 22,md: 22,lg: 22,xl: 22}} color={'white'} textAlign={'left'}>{userdata.email}</Typography>
+            <Typography variant='p' fontSize={{xs: 18,sm: 22,md: 22,lg: 22,xl: 22}} color={'white'} textAlign={'left'}>{`+91`} {userdata.mobileNumber}</Typography>
+            <Typography variant='p' fontSize={{xs: 18,sm: 22,md: 22,lg: 22,xl: 22}} color={'white'} textAlign={'left'}>{userdata.gender}</Typography>
 
 
         </Box>
@@ -68,24 +77,17 @@ function Profilefield() {
             },
             alignItems:'center',
             justifyContent:'center',
-            // margin:{
-            //   xs: '0px',
-            //   sm: '10px',
-            //   md: '10px',
-            //   lg: '10px',
-            //   xl: '10px',
-            // },
             
           }}
       >
-        <Button sx={{marginRight:{xs: '5px',sm: '70px',md: '70px',lg: '70px',xl: '70px'},padding:'5px',width:{xs: '200px',sm: '200px',md: '200px',lg: '200px',xl: '200px'},borderRadius:'100px',
+        <Button onClick={editprofile}  sx={{marginRight:{xs: '5px',sm: '70px',md: '70px',lg: '70px',xl: '70px'},padding:'5px',width:{xs: '200px',sm: '200px',md: '200px',lg: '200px',xl: '200px'},borderRadius:'100px',
       '&:hover': {
         backgroundColor: '#ffca28'},}}variant="contained"><Link style={{textDecoration:'none',color:'#000000',
         
-        }}to="/profile">Edit Profile</Link></Button>
-        <Button sx={{borderRadius:'100px',marginTop:{xs:'10px'},padding:'5px',width:{xs: '200px',sm: '200px',md: '200px',lg: '200px',xl: '200px'},
+        }}></Link>Edit Profile</Button>
+        <Button onClick={logout} sx={{borderRadius:'100px',marginTop:{xs:'10px'},padding:'5px',width:{xs: '200px',sm: '200px',md: '200px',lg: '200px',xl: '200px'},
       '&:hover': {
-        backgroundColor: '#ffca28'},}}variant="contained"><Link style={{textDecoration:'none',color:'#000000'}} to="/profile">Logout</Link></Button>
+        backgroundColor: '#ffca28'},}}variant="contained"><Link style={{textDecoration:'none',color:'#000000'}}></Link>Logout</Button>
       </Box>
     </Box>
   )

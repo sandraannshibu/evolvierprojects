@@ -1,11 +1,19 @@
-import React from "react";
+import React,{useEffect} from "react";
 import Signupfield from "../components/Signupfield";
 import { Box, Paper, ThemeProvider } from "@mui/material";
 import Logokong from "../components/Logokong";
 import theme from "../theme";
 import Layout from "./Layout";
+import {useNavigate} from "react-router-dom"
 
 const Signup = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate('/profile');
+    }
+  }, [navigate]);
   return (
     <ThemeProvider theme={theme}>
       <Layout>
